@@ -112,6 +112,12 @@ namespace Pure.Utils
             WriteLog(string.Empty, string.Empty, infoData);
 
         }
+
+        public void WriteLog(String infoData, Exception ex)
+        {
+            WriteLog(string.Empty, string.Empty, infoData +", Exception: "+ex);
+
+        }
         public void WriteLogFormat(string infoData, params object[] args)
         {
             WriteLog(string.Empty, string.Empty, string.Format(infoData, args));

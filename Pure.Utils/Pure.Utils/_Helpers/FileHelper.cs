@@ -5,7 +5,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-
+using System.Text;
 
 namespace Pure.Utils
 {
@@ -14,6 +14,66 @@ namespace Pure.Utils
     /// </summary>      
     public class FileHelper
     {
+
+        public static MemoryStream ConvertToStream(string str) {
+
+            byte[] array = Encoding.UTF8.GetBytes(str);
+            MemoryStream stream = new MemoryStream(array);             //convert stream 2 string      
+            //StreamReader reader = new StreamReader(stream);
+
+            return stream;
+        }
+        /// <summary>  
+        /// 读取文件，返回相应字符串  
+        /// </summary>  
+        /// <param name="fileName">文件路径</param>  
+        /// <returns>返回文件内容</returns>  
+        public static string ReadFile(string fileName, Encoding encoding = null)
+        {
+            StringBuilder str = new StringBuilder();
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+            using (FileStream fs = File.OpenRead(fileName))
+            {
+                long left = fs.Length;
+                int maxLength = 100;//每次读取的最大长度  
+                int start = 0;//起始位置  
+                int num = 0;//已读取长度  
+                while (left > 0)
+                {
+                    byte[] buffer = new byte[maxLength];//缓存读取结果  
+                    char[] cbuffer = new char[maxLength];
+                    fs.Position = start;//读取开始的位置  
+                    num = 0;
+                    if (left < maxLength)
+                    {
+                        num = fs.Read(buffer, 0, Convert.ToInt32(left));
+                    }
+                    else
+                    {
+                        num = fs.Read(buffer, 0, maxLength);
+                    }
+                    if (num == 0)
+                    {
+                        break;
+                    }
+                    start += num;
+                    left -= num;
+                    str = str.Append(encoding.GetString(buffer));
+                }
+            }
+            return str.ToString();
+        }
+        public static string ReadAllContent(string filepath, Encoding encoding = null) {
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+            string str = File.ReadAllText(filepath, encoding);
+            return str;
+        }
         /// <summary>
         /// Gets the orginal extension from a renamed extension. e.g. file.xml.config return .xml instead of .config. file.xml returns .xml.
         /// </summary>
