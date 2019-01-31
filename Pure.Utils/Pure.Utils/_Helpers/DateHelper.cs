@@ -8,16 +8,7 @@ namespace Pure.Utils
 {
     public class DateHelper
     {
-
-        /// <summary>
-        /// Handle parsing of dates with T-1, T+2 etc.
-        /// </summary>
-        /// <param name="dateStr">Dates with operation.</param>
-        /// <returns>Calculated date.</returns>
-        public static DateTime ParseTPlusMinusX(string dateStr)
-        {
-            return ParseTPlusMinusX(dateStr, DateTime.MinValue);
-        }
+         
         /// <summary>
         /// 获取时间戳
         /// </summary>
